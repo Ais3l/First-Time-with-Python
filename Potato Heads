@@ -1,0 +1,214 @@
+# Description: This project attempts to start the production of two potatoheads at a random centerpoint, given parameters "centerx" and "centery" (the "x" and "y" coordinates). The craft of this project appears through the following functions: "draw_eyes," "draw_hair," and "draw_mouth." These functions attempt to recreate eyes, hair, mouths, and other facial features depending on the center of the potatohead circle, meaning that the facial features will align with the random given center of the potatoheads. 
+
+from cs1.graphics import *
+
+
+# Draw the eyes on a potato of radius 150 pixels.
+# Parameters: (centerx, centery): the (x, y) coordinates of the potato center.
+# Returns: None
+
+#the following code is the process of drawing the eyes and surrouding designs, such as the glasses.
+
+def draw_eyes(centerx, centery):
+    
+    #this is the white of eyes
+    #it is essentially just a couple layers of filled circles -- the white filled circle is on top of the black filled circle,       which gives it the black outline around the circles
+    #this code is the left and right eyes (just the white area and pupil)
+    
+    set_color('black')
+    draw_filled_circle(centerx - 50, centery - 20, 20)
+    
+    set_color('white')
+    draw_filled_circle(centerx - 50, centery - 20, 19)
+    
+    set_color('black')
+    draw_filled_circle(centerx + 50, centery - 20, 20)
+    
+    set_color('white')
+    draw_filled_circle(centerx + 50, centery - 20, 19) 
+    
+    #these are the glasses
+    #they are the two rectangles (left and right) and a straight line going through the upper side to resemble the glass frames
+    #i set only one "set_color('blue')" because the other functions needed to output "blue"
+    
+    
+    set_color('blue')
+    draw_rect(centerx - 75, centery - 40, 50, 40)
+    
+    draw_line(centerx - 150, centery - 40, centerx + 150, centery - 40)
+    
+    draw_rect(centerx + 25, centery - 40, 50, 40)
+    
+    
+    #these are the pupils of the eyes
+    #i went a bit ham on these, so the eyes look a bit creepy
+    #i also added ovals to the center of the pupils, so they look reptilian
+    
+    
+    set_color('black')
+    draw_filled_circle(centerx - 45, centery - 15, 10)
+    
+    set_color('yellow')
+    draw_filled_circle(centerx + 55, centery - 15, 10)
+    
+    set_color('green')
+    draw_filled_oval(centerx + 55, centery - 15, 4, 6)
+    
+    set_color('orange')
+    draw_filled_oval(centerx - 45, centery - 15, 4, 6)
+    
+    #the eyebrows are just straight black lines to bring out the indifferent attitude of the clown
+    #hopefully the irony comes through
+    
+    set_color('black')
+    draw_line(centerx - 80, centery - 50, centerx - 25, centery - 50)
+    
+    draw_line(centerx + 25, centery - 50, centerx + 80, centery - 50)
+
+    
+# Draw the hair on a potato of radius 150 pixels.
+# Parameters: (centerx, centery), the (x, y) coordinates of the potato center.
+# Returns: None
+
+#this is the start of the code that draws the hair and its surrounding designs
+
+def draw_hair(centerx, centery):
+    
+    #start of hair
+    #but i will first do a hat with a golden oval in the middle
+    #through the draw_filled_polygon function, I was able to make a triangle for the top part of the hat
+    #the rest of the hat is made of the draw_filled_polygon function too, but they all make rectangles
+    #lastly, the oval is the yellow coin-like design in the middle of the hat
+    
+    set_color('pink')
+    draw_filled_polygon(centerx - 150, centery - 80, centerx + 150, centery - 80, centerx + 150, centery - 120, centerx - 150, centery - 120)
+    
+    
+    set_color('pink')
+    draw_filled_polygon(centerx - 90, centery - 120, centerx + 90, centery - 120, centerx, centery - 200, centerx - 90, centery - 120)
+    
+    set_color('black')
+    draw_filled_polygon(centerx - 90, centery - 120, centerx + 90, centery - 120, centerx + 90, centery - 130, centerx - 90, centery - 130)
+    
+    set_color('gold')
+    draw_filled_oval(centerx, centery - 150, 5, 10)
+    
+    #the ears
+    #the ears were simple -- just two rectangles on either side of the head
+    #i made it so that the top part of the frame of the glasses match the top of the ears
+    
+    set_color('brown')
+    draw_filled_rect(centerx - 155, centery - 40, 20, 60)
+    
+    draw_filled_rect(centerx + 135, centery - 40, 20, 60)
+    
+    
+# Draw the mouth on a potato of radius 150 pixels.
+# Parameters: (centerx, centery), the (x, y) coordinates of the potato center.
+# Returns: None
+
+#this is the start of the code that draws the mouth and its surrounding designs
+
+def draw_mouth(centerx, centery):
+    
+    #the nose starts here -- a simple filled circle at the center to resemble the clown nose
+    
+    set_color('red')
+    draw_filled_circle(centerx, centery, 20)
+    
+    #runny nose
+    #the runny nose adds some character to the indifferent cloud
+    #it is a simple oval with a long height and short width
+    
+    set_color('blue')
+    draw_filled_oval(centerx-10, centery+20, 2, 20)
+    
+    #mouth
+    #the mouth is just an oval -- but more like an ellipsis
+    
+    set_color('white')
+    draw_filled_oval(centerx, centery+70, 60, 20)
+    
+    #this line that goes through the oval is not the teeth, but the separation point of his lips
+    
+    set_color('black')
+    draw_line(centerx - 30, centery + 70, centerx + 30, centery + 70)
+    
+    #blush
+    #the clown has red filled circles around his cheeks to show the clown makeup
+    
+    set_color('red')
+    draw_filled_oval(centerx - 80, centery+30, 30, 15)
+    
+    draw_filled_oval(centerx + 80, centery+30, 30, 15)
+    
+    
+    
+    
+    
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+# Change this value to False if you want to stop the potatoes changing locations,
+# but I will turn this back on before grading.  Normally you shouldn't need to change this.
+MOVE_HEADS = True
+
+# *** DO NOT CHANGE ANY OF THE CODE BELOW. ***
+import random
+
+def reset_pen():
+    set_color("black")
+    set_background_color("white")
+    set_line_thickness(1)
+
+def main():
+    open_canvas(800, 400)
+
+    # Draw the left potato:
+    # Draw a potato-colored circle, centered approximately at (200, 200).
+    mj = 0
+    if MOVE_HEADS:
+        mj = 40
+    cx = random.randint(-mj, mj) + 200
+    cy = random.randint(-mj, mj) + 200
+    set_background_color_rgb(224, 144, 76)
+    set_color_rgb(224, 144, 76)
+    draw_filled_circle(cx, cy, 150)
+
+    # Draw the features of the left potato.
+    reset_pen()
+    draw_eyes(cx, cy)
+    reset_pen()
+    draw_hair(cx, cy)
+    reset_pen()
+    draw_mouth(cx, cy)
+    reset_pen()
+
+    # Draw the right potato:
+    # Draw a potato-colored circle, centered approximately at (600, 200).
+    cx = random.randint(-mj, mj) + 600
+    cy = random.randint(-mj, mj) + 200
+    set_color_rgb(224, 144, 76)
+    set_background_color_rgb(224, 144, 76)
+    draw_filled_circle(cx, cy, 150)
+
+    # Draw the features of the right potato.
+    reset_pen()
+    draw_eyes(cx, cy)
+    reset_pen()
+    draw_hair(cx, cy)
+    reset_pen()
+    draw_mouth(cx, cy)
+
+# Start program.
+main()
