@@ -1,0 +1,202 @@
+# Description: this program attempts to recreate the future generations of a row of either plant A or plant B. the code asks what plant the user is growing. if the plant is A, then the code asks what the starting garden is, how many dormant plants are on either side, and how many generations the user would like to see (not including the first generation). plant A has two states: alive (*) and dormant (.). if the plant is B, then the code asks an additional question of what the neighborhood size is to determine whether or not the plant will grow (odd number of alive plants) or shrink (even number of alive plants). plant B has three states: big (^), small (*), and dormant (.). the initial garden is modified because additional dormant plants are added to either side. then with the modified garden and the given inputs, the code portrays future generations of the plant row.
+
+# Returns the number of small plants (*) in this garden.
+# garden: a string containing a row of plants.
+def count_small(garden):
+    
+    small_count = 0
+    
+    for asterisk in garden:
+        if asterisk == '*':
+            small_count = small_count + 1 # counts how many small plants there are in the row
+            
+        else:
+            continue
+            
+    return small_count
+
+# Returns the number of big plants (^) in this garden.
+# garden: a string containing a row of plants.
+def count_big(garden):
+    big_count = 0
+    
+    for hat in garden:
+        if hat == '^':
+            big_count = big_count + 1 # counts how many big plants there are in the row
+            
+        else:
+            continue
+            
+    return big_count
+
+# Returns the number of dormant plants (.) in this garden.
+# garden: a string containing a row of plants.
+def count_dormant(garden):
+    dot_count = 0
+    for dot in garden:
+        if dot == '.':
+            dot_count = dot_count + 1 # counts how many dormant plants there are in the row
+        else:
+            continue
+            
+    return dot_count
+
+# Creates the next generation of a garden of Plant A from the current generation.
+# garden: a string containing a row of plants.
+# Returns a string containing the next generation of the garden.  This string should
+# be the same length as the previous generation.
+def next_generation_A(garden):
+    newgarden = '' # empty string 
+    
+    end = garden[0]
+    newgarden = newgarden + end
+    
+    for i in range(1, len(garden) - 1):
+        ch = garden[i]
+        if ch == '*':
+            left = garden[i-1] # slices left side of current flower
+            right = garden[i+1] # slices right side of current flower
+            if left == '.' and right == '.':
+                newgarden = newgarden + '.'
+            elif left == '.' and right == '*':
+                newgarden = newgarden + '*'
+            elif left == '*' and right == '*':
+                newgarden = newgarden + '.'
+            elif left == '*' and right == '.':
+                newgarden = newgarden + '*'
+                
+        elif ch == '.':
+            left = garden[i-1]
+            right = garden[i+1]
+            if left == '.' and right == '.':
+                newgarden = newgarden + '.'
+            elif left == '.' and right == '*':
+                newgarden = newgarden + '*'
+            elif left == '*' and right == '*':
+                newgarden = newgarden + '.'
+            elif left == '*' and right == '.':
+                newgarden = newgarden + '*'
+                
+    newgarden = newgarden + '.' # adding final '.' at end of string
+            
+    
+    return newgarden
+
+# Runs the simulation for plant A for the given number of generations, given a
+# starting garden. Note that this function doesn't return anything.
+def run_garden_A(garden, generations):
+
+    cd = count_dormant(garden) # counts the number of dormant plants in this row
+    ca = count_small(garden) # counts the number of small plants in this row
+    
+    print(garden, cd, ca) # this is the printed outcome of the garden row, dormant #, small plant # -- it then repeats within the following and the for loop
+    
+    # first of generations
+    next_gen = next_generation_A(garden)
+    cd = count_dormant(next_gen)
+    ca = count_small(next_gen)
+
+    print(next_gen, cd, ca)
+    
+    # remaining generations
+    for i in range(1, generations):
+        next_gen = next_generation_A(next_gen)
+        cd = count_dormant(next_gen)
+        ca = count_small(next_gen)
+
+        print(next_gen, cd, ca)
+    
+# Creates the next generation of a garden of Plant B from the current generation.
+# garden: a string containing a row of plants.
+# nsize: the size of the neighborhood that Plant B will use.
+# Returns a string containing the next generation of the garden.  This string should
+# be the same length as the previous generation.
+def next_generation_B(garden, nsize):
+    newgarden = ""   # Use this variable to hold the next generation of the garden.
+        
+    left_end_dead = garden[0:nsize]
+    newgarden = newgarden + left_end_dead
+    
+    for i in range(nsize, len(garden) - nsize):
+        hood = garden[i-nsize:i+nsize+1] # slices the neighborhood of the current flower to see how many plants are alive
+
+        
+        cs = int(count_small(hood))
+        cb = int(count_big(hood))
+        
+        total_alive = cs + cb # total plants alive
+        
+        plant_status = garden[i]
+        
+        if (total_alive % 2) != 0: # to see how many plants are odd -- odd plants grow
+            if plant_status == '.':
+                newgarden = newgarden + '*'
+            elif plant_status == '*':
+                newgarden = newgarden + '^'
+            elif plant_status == '^':
+                newgarden = newgarden + '^'
+        elif (total_alive % 2) == 0: # to see how many plants are even -- even plants decrease
+            if plant_status == '.':
+                newgarden = newgarden + '.'
+            elif plant_status == '*':
+                newgarden = newgarden + '.'
+            elif plant_status == '^':
+                newgarden = newgarden + '*'
+                
+    right_end_dead = garden[len(garden) - nsize:]
+    newgarden = newgarden + right_end_dead
+    
+    return newgarden
+
+
+# Runs the simulation for plant B for the given number of generations, given a
+# starting garden. nsize is the size of the neighborhood. 
+# Note that this function doesn't return anything.
+def run_garden_B(garden, nsize, generations):
+
+    cd = count_dormant(garden)
+    cs = count_small(garden)
+    cb = count_big(garden)
+    
+    print(garden, cd, cs, cb) # garden row, dormants counted, small plants counted, big plants counted
+    
+    # first of generations
+    next_gen = next_generation_B(garden, nsize)
+    cd = count_dormant(next_gen)
+    cs = count_small(next_gen)
+    cb = count_big(next_gen)
+
+    print(next_gen, cd, cs, cb)# garden row, dormants counted, small plants counted, big plants counted
+   
+    # remaining generations
+    for i in range(1, generations):
+        next_gen = next_generation_B(next_gen,nsize)
+        cd = count_dormant(next_gen)
+        cs = count_small(next_gen)
+        cb = count_big(next_gen)
+
+        print(next_gen, cd, cs, cb) # garden row, dormants counted, small plants counted, big plants counted
+
+def main():
+    ptype = input("Are you growing plant A or B? ")
+
+    if ptype == 'A':
+        garden = input("What is the starting garden? ")
+        sidenum = int(input("How many dormant plants are on either side? "))
+        garden = ('.' * sidenum) + garden + ('.' * sidenum) # this is the modified garden with the dormants plants applied onto either side
+        numgens = int(input("How many generations do you want to see? (not including the first) "))
+       
+        run_garden_A(garden, numgens)
+        
+      
+        
+    elif ptype == 'B':
+        garden = input("What is the starting garden? ")
+        sidenum = int(input("How many dormant plants are on either side? "))
+        garden = ('.' * sidenum) + garden + ('.' * sidenum) # this is the modified garden with the dormants plants applied onto either side
+        numgens = int(input("How many generations do you want to see? (not including the first) "))
+        nsize = int(input('What is the neighborhood size? ')) # different from plant A, the neighborhood size is relevant in the plant B section
+        
+        run_garden_B(garden, nsize, numgens)
+        
+main()
