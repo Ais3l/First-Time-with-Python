@@ -1,0 +1,133 @@
+# Description: The two pandas Ya Ya and Le Le are one of the few pandas that exist outside of China. Although they live in a zoo, they have fun through a game, in which the premise of it lies in that whoever takes the last stone out of a pile loses. This code attempts to mimick this game. With the various functions written, it will check to see if the game is over, update who the user is after each turn, ask who will want to start the game, and ask how many stones each user will like to take. As previously stated, the user to remove the last stone from the pile loses.
+
+# the variables one and two are global variables for the program to remember who exactly is playing, so these questions will be asked first before the main() function
+
+print('Welcome to the panda party!')
+    
+one = input('What is player one\'s name? ')
+two = input('What is player two\'s name? ')
+print()
+
+# function is_game_over with parameter curr_stones, informing number of current stones in the central pile. the function will  return True if and only if the game is done, and False if not done. The game should be over when the curr_stones equals 0.
+
+def is_game_over(curr_stones):
+    if curr_stones > 0:
+        return False
+    elif curr_stones == 0:
+        return True
+        
+# the function next_player with string parameter curr_player, which is the current player's name. the function will return the opposite player's name. So if player one's name is the parameter input, then the returned value will be player two's name.
+    
+def next_player(curr_player):
+    if curr_player == one:
+        return two
+    elif curr_player == two:
+        return one
+    
+# the function get_first_player takes no parameters. this function should ask the user to type in the first player in the game, and will use the input statement to make sure the user enters something valid. the user wil be informed to either input the integer 1 which stands for player one and 2 which stands for player two. if the user inputs anything other than 1 or 2, then they will be continually asked to input a valid integer input. the function will return a string value of either the player one's name or player two's name.
+
+def get_first_player(one, two):
+    int_name = input('Who should begin the game? Enter 1 for player one and 2 for player two: ')
+    print()
+    
+    if int_name == 1 or int_name == '1':
+        return one
+    
+    elif int_name == 2 or int_name == '2':
+        return two
+    
+    while int_name != 1 or int_name != '1' or int_name != 2 or int_name != '2': 
+        int_name = input('Invalid choice; please re-select: ')
+        print()
+        
+        if int_name == '1' or int_name == 1:
+            return one
+            break
+        elif int_name == '2' or int_name == 2:
+            return two
+            break
+        else:
+            continue
+        
+    
+# the function get_choice with parameters curr_player and curr_stones will ask the player's name how many stones they would like to remove from the pile. the current player has to take at least one stone and a max of three stones. yet if the user inputs an invalid number of stones (outside the range of 1 and 3), the program should print an error message to guide the user back on track. ultimately, the function will return the number of stones the player chooses to take.   
+    
+def get_choice(curr_player, curr_stones):
+    print(curr_player,', it is your turn.', sep='')
+    print('There are ', curr_stones, ' stones left in the pile. How many will you take?', sep='', end='')
+    take = int(input(' '))
+    print()
+    
+    while take < 1 or take > 3:
+        if take < 1:
+            print('You must take at least one stone.')
+        
+            print('There are ', curr_stones, ' stones left in the pile. How many will you take?', sep='', end='')
+        
+            take = int(input(' '))
+            
+            print()
+            
+        elif take > 3:
+            print('You cannot take more than 3 stones.')
+        
+            print('There are ', curr_stones, ' stones left in the pile. How many will you take?', sep='', end='')
+        
+            take = int(input(' '))
+            
+            print()
+            
+    
+    if take >= 1 and take <= 3:
+        while take > curr_stones:
+            print('You cannot take more than', curr_stones, 'stones.')
+        
+            print('There are ', curr_stones, ' stones left in the pile. How many will you take?', sep='', end='')
+        
+            take = int(input(' '))
+            
+            print()
+            
+        if take <= curr_stones:
+            curr_stones = curr_stones - take
+            return take 
+        
+# this is the main function, which will be calling the various functions listed above. this version of the code contains extra features: the option to customize the players' names and to play the game again. this is why there is the while loop with the variable play_again. while play_again equals "y," it will continue to iterate; however, whenever play_again equals anything other than "y" or just "n," then the while loop will stop and the interpreter will move on to the next code, which is printing "Thanks for playing!" yet, whenever the while loop is still looping, the code will ask how many stones the players would like to play with, how many stones they would like to remove each time it is their turn and so on. The inner while loop serves a purpose of getting the next player and making sure the game has not ended (or has ended). 
+
+def main():
+    
+    play_again = 'y'
+    
+    while play_again == 'y': # outer loop
+    
+        curr_stones_ = int(input('What number of stones do you want to start with? '))
+        print()
+        
+        curr_player_ = get_first_player(one, two) # who is playing?
+    
+        taken_from_center = get_choice(curr_player_, curr_stones_) # checks how many stones were removed by player in play
+    
+        curr_stones_ = (curr_stones_) - (taken_from_center) # equation to check current amount of stones after removal
+            
+        game_status = is_game_over(curr_stones_) # checks if game is over
+            
+        while game_status == False: # inner loop
+            curr_player_ = next_player(curr_player_) # checks who is the next player
+            
+            taken_from_center = get_choice(curr_player_, curr_stones_) # checks how many stones were removed by player in play
+    
+            curr_stones_ = (curr_stones_) - (taken_from_center) # equation to check current amount of stones after removal
+            
+            game_status = is_game_over(curr_stones_) # is the game over yet?
+       
+        print('Game over!') # if so, then print this
+        print(next_player(curr_player_), 'wins and', curr_player_, 'loses!') # announces who won and who lost
+        print()
+    
+        play_again = input('Would you like to play again? y for yes and n for no: ') # this is the variable that will allow the user to keep playing or not 
+        
+    print()
+    print('Thanks for playing!')
+        
+
+main() # calling of main function
