@@ -1,0 +1,133 @@
+# Description: For this project, the code will draw images from a sequence of x and y coordinates that will receive information from an input file. In general, the code will have four functions: it 
+    # it will ask the user for a file name from where it will retrieve the coordinates from
+    # it will open a canvas with the specifici dimensions stated by the file
+    # it will read the remaining portions of the file and parse and execute all the commands in the      file
+    # and it will lastly, upon executions of all the code, it will display the commands on the canvas through line or dotted line images.
+
+    
+# these are external libraries that the code is importing to perform drawing functions and the square root function 
+
+from cs1.graphics import *
+from math import sqrt
+
+# when called, the function draw_dotted_line(), with parameters x1, y1, x2, and y2, will draw an image with dotted lines. the parameters were taken from the function main(). the main() function opens and reads file. then, it changes string to integers and calls function draw_dotted_line and sends the arguments into parameters.
+
+# the code takes x1, y1, x2, and y2 and converts them into integers. then the code assigns them into variables and uses them to calculate xdistance and ydistance in order to calculate the total change  distance between the two points. then, through the pythagorean theorem, we square xdistance and ydistance and square root the result, giving us total_distance. then, total_distance is divided by ten (the distance of one dot from another). this then gives us the number of gaps in between the dotted points.
+
+# then, to calculate the total change in x and y directions, meaning from one dotted point to another, the code assigns into variables x_step and y_step each x and y distance (xdistance and ydistance) divided by the number of gaps in between the points.
+
+# then, consequently, the draw_filled_circle function is called with parameters x1, y1, and 2, the radius of each circle.
+
+# following, a while loop is created, stating "while count < divided_10." this while loop is essentially stating that as long as count, which starts at 0, is less than the number of gaps in between the points, the loop will keep iterating. once count is equal to or greater than the number of gaps in between the points, the loop will stop.
+
+# until then, the loop keeps iterating draw_filled_circle commands with parameters "x1 + x_step, y1 + y_step,2," where x_step and y_step is continually added to x1 and y1, respectively. the 2 indicates the radius of the dotted points. and the last part of the while loop, count is added to keep track of the iterations.
+
+def draw_dotted_line(x1,y1,x2,y2):
+    
+    start_pointx = int(x1)
+    start_pointy = int(y1)
+    
+    end_pointx = int(x2)
+    end_pointy = int(y2)
+
+    xdistance = end_pointx - start_pointx
+    ydistance = end_pointy - start_pointy
+    
+    total_distance = (xdistance**2) + (ydistance**2)
+    
+    
+    total_distance = sqrt(total_distance)
+    
+    
+    divided_10 = total_distance // 10 # number of gaps in between the points
+    
+    
+    #total change in x and y directions
+    
+    x_step = xdistance / divided_10
+    
+    y_step = ydistance / divided_10
+    
+    draw_filled_circle(x1,y1,2)
+
+    count = 0
+    
+    while count < divided_10:
+        draw_filled_circle(x1 + x_step, y1 + y_step,2)
+        x1 = x1 + x_step
+        y1 = y1 + y_step
+        count = count + 1
+    
+# the function main() essentially is what starts the entire code. 
+
+# it asks the user what type of file they would like to open. then, the name of the file is assigned into variable ask_file and then assigned again into variable infile.
+
+# it initially reads the first line of the file to see the instructions for the canvas size. it does so by splitting the first line into three distinct sections: instruction, x, and y. instruction is the command, x the x length, and y the y length.
+
+# then with this x and y converted into integers, x and y are used to open a canvas of size x and y with a line thickness of 2.
+
+# then, the code runs a nested loop. the outer loop reads the following line and does the splitting process again. if the instruction reads 'jumpto,' then it enters the inner loop, causing it to read the next line and splitting the file line into three distinct sections again. and in the inner loop, if the instruction (instruction2) reads 'lineto,' then it reads the draw_line statement with the parameters x, y, x2, and y2 (x and y came from the outer loop and x2 and y2 came from the inner loop).
+
+# however, if the inner loop instruction2 reads 'dlineto,' then it will call the function draw_dotted_line(x1,y1,x2,y2).
+
+# now, if the outer loop instruction does not read 'jumpto' and instead reads 'lineto' or 'dlineto,' then it will run into the elif statements, either reading draw_line with parameters x,y,x2,y2 or calling the draw_dotted_line(x1,y1,x2,y2) function.
+
+# something interesting to note for the elif 'lineto' and elif 'dlineto' statements is that after drawing the image, they assign x2 = x and y2 = y for the analysis of the following lines of the file.
+            
+def main():
+    ask_file = input('What file would you like to open? Please include ".txt" at the end. ')
+    
+    infile = ask_file
+    
+    infile = open(infile, 'r')
+    
+    line1 = infile.readline()
+    
+    instruction, x, y = line1.split()
+    x = int(x)
+    y = int(y)
+    
+    open_canvas(x,y)
+    set_line_thickness(2)
+    
+    for line in infile:
+        instruction, x, y = line.split()
+        x = int(x)
+        y = int(y)
+        
+        if instruction == 'jumpto':
+            x = int(x)
+            y = int(y)
+
+            for line2 in infile:
+                instruction2, x2, y2 = line2.split()
+                x2 = int(x2)
+                y2 = int(y2)
+
+                if instruction2 == 'lineto':
+                    draw_line(x,y,x2,y2)
+                    
+                    break
+
+                elif instruction2 == 'dlineto':
+                    draw_dotted_line(x,y,x2,y2)
+
+                    break
+                
+        elif instruction == 'lineto':
+            x = int(x)
+            y = int(y)
+            draw_line(x,y,x2,y2)
+            
+            x2 = x
+            y2 = y
+            
+        elif instruction == 'dlineto':
+            x = int(x)
+            y = int(y)
+            draw_dotted_line(x,y,x2,y2)
+            
+            x2 = x
+            y2 = y
+            
+main()
