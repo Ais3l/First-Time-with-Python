@@ -1,0 +1,160 @@
+# Description: This project attempts to code a perpetual calendar, which is a calendar meant basically last forever. Usually, perpetual calendar are utilized to look up the specific day of the week given a date in the future, but users can also look back into the past. With various concepts learned from class, such as calling functions with parameters, different inputs, while loops, etc, the following perpetual calendar was coded.
+
+# this is a called function called is_leap() with parameter "year"
+# year is an integer
+# this function either returns True or False depending on the value of year
+# we have 4 branches for the if-elif-else statements
+# the code accounts for years that are divisble by 100 but not divisble by 400 (not leap years)
+# and if the year is divisible by 4, then it will most definitely be a leap year
+
+def is_leap(year):
+    if year % 100 == 0 and year % 400 != 0:
+        return False
+    elif year % 100 == 0 and year % 400 == 0:
+        return True
+    elif year % 4 == 0:
+        return True
+    else:
+        return False
+        
+    
+# this is the start of the helper function magic_month(), a function designed to be called from another function, in order to help it do its job
+# magic_month will return the number of days that have passed since the beginning of the year until the first of a month
+# or in other words this function should return the number of days gone by since the beginning of the year (january 1st) 
+
+def magic_month(month):
+    if month == 1:
+        return (0) 
+    elif month == 2:
+        return (31)
+    elif month == 3:
+        return (59)
+    elif month == 4:
+        return (90)
+    elif month == 5:
+        return (120)
+    elif month == 6:
+        return (151)
+    elif month == 7:
+        return (181)
+    elif month == 8:
+        return (212)
+    elif month == 9:
+        return (243)
+    elif month == 10:
+        return (273)
+    elif month == 11:
+        return (304)
+    elif month == 12:
+        return (334) 
+    
+# this is the start of the function day_of_year(), taking 3 integer parameters: a month (from 1-12), a day (from 1-31), and a year (any year is fine). 
+# day_of_year() should return the day of year (range is 1-366) that this specific date occurs upon
+# the day_of_year() function calls the two above functions, first is_leap(year) to determine if the year is a leap year or not, and then magic_month(month) to determine how many days have passed since that month
+# then we add day to the magic_month(month) value to get the specific days that've passed since the start of the year
+# if it is a leap year and a month greater than or equal to march (3), then the code adds an integer value of 1 to it
+        
+def day_of_year(month, day, year):
+    if is_leap(year) == False:
+        return (magic_month(month) + day) 
+    elif is_leap(year) == True and month < 3:
+        return (magic_month(month) + day)
+    elif is_leap(year) == True and month >= 3:
+        return (magic_month(month) + day + 1)
+    
+    
+# this is the start of the function called new_years_day(), which will allow the user to identiy the day of the week of any given day in history
+# the parameter is year
+# first, the code must determine if the year is a leap year or not, which will call for the is_leap() function
+# if true, it will conduct a series of mathematical computations -- it is important to note that the code will subtract one from the newyears_answer variable to account for the additional day of the year. then with day_of_week, the code will compute newyears_answer % 7, and return the variable day_of_week
+# if false, it will do everything like the true (leap year), except for subtracting the integer 1 from newyears_answer since it is a normal year without an additional day
+
+def new_years_day(year):
+    
+    if is_leap(year) == True:
+            
+        newyears_answer = ((year + (year // 4)) - (year // 100) + (year // 400)) - (1)
+    
+        integer_day = newyears_answer % 7
+        
+        return integer_day
+    
+    elif is_leap(year) == False:
+        newyears_answer_ = ((year + (year // 4)) - (year // 100) + (year // 400))
+        
+        integer_day_ = newyears_answer_ % 7
+        
+        return integer_day_
+    
+    
+# this is the start of function day_of_week(), with parameters month (1-12), the day of the month (1-31), and the year
+# this function computes mathematical computations similar to the function above, but it instead adds the values from day_of_year(month, day, year) and new_years_day(year), then subtracts 1, and then divides that value by 7. with the remainder upon division by 7, the code returns it through variable day_week
+
+def day_of_week(month, day, year):
+    day_week = (((day_of_year(month, day, year) + new_years_day(year)) - 1) % 7)
+    
+    return day_week
+
+# this is the start of function def day_of_week_str(), with parameters month, day, year
+# it essentially does the same thing as function day_of_week(month, day, year), but it returns a string value for the day of week instead of an integer value
+# with a 7 branch if-elif-else statement, the integers will be converted to string values for days of the week
+
+def day_of_week_str(month, day, year):
+    if day_of_week(month, day, year) == 0:
+        return 'Sunday'
+    elif day_of_week(month, day, year) == 1:
+        return 'Monday'
+    elif day_of_week(month, day, year) == 2:
+        return 'Tuesday'
+    elif day_of_week(month, day, year) == 3:
+        return 'Wednesday'
+    elif day_of_week(month, day, year) == 4:
+        return 'Thursday'
+    elif day_of_week(month, day, year) == 5:
+        return 'Friday'
+    elif day_of_week(month, day, year) == 6:
+        return 'Saturday'
+    
+# this is the start of the main() function, with no parameters
+# within the main() function, inputs for the variables month, day, and year will be determined, which are very important for the rest of the code to follow through
+# after the function main() is called, the code will ask the user to input integer values for variables month, day, and year.
+# with these values then 4 print functions will proceed, first calling for:
+# day_of_year(month, day, year) -- for day number of the year
+# day_of_week_str(month, day, year) -- for the string day of the week
+# day_of_week_str(month, day, 2020) -- for the same day of the week but in 2020
+# and lastly day_of_week_str(1, 1, year) -- for New Year's Day's day of the week in the given year
+# furthermore, after the last print function, the repeat variable is observed, which asks the user if they would like to pick another date.
+# if they respond with 'y', the code will repeat the whole process
+# as long as repeat = 'y', the code will keep repeating
+
+def main():
+    
+    repeat = 'y'
+    
+    while repeat == 'y':
+        
+    
+        print('Pick a date, any date (such as your birthday!')
+    
+        month = int(input('What is the month? (1-12)? '))
+        day = int(input('What is the day? '))
+        year = int(input('What is the year? '))
+                
+        print('This is day number ', day_of_year(month, day, year), ' of the year.', sep='')
+   
+        print('This date falls on a ', day_of_week_str(month, day, year), '.', sep='')
+                
+        print('In 2020, this date falls on a ', day_of_week_str(month, day, 2020), '.', sep='')
+                
+        print('In ', year, ', New Year\'s Day falls on a ', day_of_week_str(1, 1, year), '.', sep='')
+     
+        repeat = input('Would you like to pick another date? (y for yes): ')
+           
+        print()
+        
+    print('Goodbye!')
+                
+main()
+        
+   
+   
