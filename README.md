@@ -1,7 +1,11 @@
 # Hello, friends!
 
-# Welcome to this project named "Let's Go to the Moon."
+# Welcome to this repository.
 
-# It was literally my first code that I made while learning python, so enjoy!
+# It is just a collection of my first projects that I made while learning Python!
 
-# I\'m pretty sure it calculates velocities and distances in order to get to the moon. :))
+# This is not meant to enlighten or really teach anybody.
+
+# This is more of a "for me" type of thing, where I can hopefully track my coding journey!
+
+# Anyways, thanks for checking it out!
