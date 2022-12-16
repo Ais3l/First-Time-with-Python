@@ -1,0 +1,274 @@
+# Description: with the given ".ppm" image file, this code attempts to modify it according to the user's personal filter tastes, ranging from negate red, negate green, negate blue, remove red, remove green, remove blue, negate all (red, green, and blue), flip horizontally, and grayscale. accordingly, for each preset (negate, remove, flip, and grayscale), there is a separate function that accomplishes these tasks. in the "main" function, the user is asked to input a ".ppm" file and select a filter of their choice. as a result, the original ".ppm" image file will be modified and displayed on the user interface
+
+from cs1.ppm import display_ppm
+from cs1.notebooks import *
+
+#This function returns a new filename based on the original and a filter.
+#Parameters:
+#    original_filename: The original name of the file: something.ppm
+#    filter: The filter that was applied (an integer 1-9)
+#Returns:
+#    A new filename based on the filter.
+#    
+#  Examples:
+#    make_output_filename('rhodes.ppm', 9) returns rhodes_grayscale.ppm
+#    make_output_filename('lynx.ppm', 8) returns lynx_flipped.ppm
+#
+def make_output_filename(original_filename, filter):
+    mods = ['negate_red', 'negate_green', 'negate_blue',
+            'negate_all', 'remove_red', 'remove_green',
+            'remove_blue', 'flip_horizontally', 'grayscale']
+    
+    
+    makin_slice = str(original_filename[0:-4])
+    
+    new_filename = makin_slice + '_' + mods[filter - 1] + '.ppm'
+    
+    return new_filename
+  
+
+# This function takes in a list and negates each value in the list
+# To negate a value, subtract the value from 255
+# Parameters: lst, a 1-D list of integers
+# Returns: a list with the modified values (negatives of the original values)
+def negate(lst):
+    for i in range(0, len(lst)):
+        ch = int(lst[i])
+        ch = 255 - ch
+        lst[i] = ch
+        
+    return lst
+
+# This function takes in a list and flattens each value in the list
+# To flatten a value, set it equal to zero 
+# Parameters: lst, a 1-D list of integers
+# Returns: a list of the same length as (lst) with all zeros
+def flatten(lst):
+    for i in range(0, len(lst)):
+        ch = lst[i]
+        ch = 0
+        lst[i] = ch
+        
+    return lst
+
+# This function takes in a list and reverses the order of the list
+# Parameters: lst, a 1-D list of integers
+# Returns: the original list in reverse order
+def flip(lst):
+    new_list = []
+    for i in range(len(lst), 0, -1):
+        ch = lst[i-1]
+        new_list.append(ch)
+        
+    return new_list
+
+# This function takes in three 1-D lists, and returns 3 lists that contain the average 
+# of the original values at each index
+# To calculate the new value for each list, we need to take the average of the values
+# and replace the value with the average in all 3 lists (these values must be integers)
+# Example: red[0] = 30, green[0] = 100, blue[0] = 74, average = (30 + 100 + 74) / 3 = 68
+# so we set red[0] = 68, green[0] = 68 and blue[0] = 68.
+# Hint: Use parallel lists
+# Parameters: red, green, blue (3 1-D lists with the same number of elements in them)
+# Returns: a list of the same length, whose values are averages.
+def grayscale(red, green, blue):
+    twoD = [red, green, blue]
+    
+    total = 0
+    new_list = []
+    
+    for row in range(0, len(twoD[0])):
+        for column in range(0, len(twoD)):
+            total = total + int(twoD[column][row])
+             
+        avg = total / len(twoD)
+        avg = int(avg)
+            
+        new_list.append(avg)
+        
+        total = 0
+            
+    return new_list
+        
+
+# This function copies the first 3 lines of input into output
+# Parameters: input_file (fileObject that you're reading from),
+#             output_file (fileObject that you're writing to)
+# Returns: None
+def process_header(input_file, output_file):
+    # this will read the first three lines from the input file and write them to the output file.
+    # These file objects were already opened in main() for you.
+    line1 = input_file.readline()
+    line2 = input_file.readline()
+    line3 = input_file.readline()
+
+    
+    output_file.write(line1)
+    output_file.write(line2)
+    output_file.write(line3)
+    
+    
+
+# This function applies the specified filter to each pixel in input, writing it to output.
+# Hint: Recall that the split function for strings allows you to either specify exactly
+# how many variables to create, or if you don't know, you can return the result into
+# a single variable, which will be a list of strings
+# Example:   s = "5,4,2,5,6,7"
+#            values = s.split(',') #values is now equal to ['5','4','2','5','6','7']
+# 
+# Parameters: input_file: the input file with the header already read
+#             output_file: the output file with the header already written
+#             filter: the filter to apply
+# Returns: None
+def process_body(input_file, output_file, filter):
+     
+
+    for line in input_file:
+        line = line.rstrip()
+        red = []
+        green = []
+        blue = []
+        values = line.split(' ')
+        count = 1
+        for i in range(0, len(values)):
+            ch = values[i]
+            
+            if count == 1:
+                red.append(ch)
+                count = count + 1
+                continue
+            elif count == 2:
+                green.append(ch)
+                count = count + 1
+                continue
+            elif count == 3:
+                blue.append(ch)
+                count = 1
+                continue
+   
+     
+        if filter == 1:
+            red = negate(red)
+        elif filter == 2:
+            green = negate(green)
+        elif filter == 3:
+            blue = negate(blue)
+        elif filter == 4:
+            red = negate(red)
+            green = negate(green)
+            blue = negate(blue)
+        elif filter == 5:
+            red = flatten(red)
+        elif filter == 6:
+            green = flatten(green)
+        elif filter == 7:
+            blue = flatten(blue)
+        elif filter == 8:
+            red = flip(red)
+            green = flip(green)
+            blue = flip(blue)
+        elif filter == 9:
+            grayed_out_list = grayscale(red, green, blue)
+            red = grayed_out_list
+            green = grayed_out_list
+            blue = grayed_out_list
+            
+            
+        empty_string = ''
+        
+        
+        for i in range(0, len(red)):
+            r_ch = str(red[i])
+            empty_string = empty_string + r_ch + ' ' 
+            g_ch = str(green[i])
+            empty_string = empty_string + g_ch + ' '
+            b_ch = str(blue[i])
+            empty_string = empty_string + b_ch + ' '
+        
+        empty_string = empty_string + '\n'
+        
+        
+        output_file.write(empty_string)     
+        
+
+# The main function is mostly written for you.
+# Add an input validation loop where specified to ensure valid input from the user
+def main():
+    # get input from user
+    input_filename = input('PPM file? ')
+    mod = int(input("""Select a filter:
+    1. Negate red
+    2. Negate green
+    3. Negate blue
+    4. Negate all
+    5. Remove red
+    6. Remove green
+    7. Remove blue
+    8. Flip horizontally
+    9. Grayscale
+    """))
+    # input validation loop here to ensure valid input from the user 
+    
+    confirmation_inputfile = False
+    
+    while confirmation_inputfile == False:
+        
+        if input_filename == 'rhodes.ppm' or input_filename == 'bclc.ppm' or input_filename == 'zelda.ppm' or input_filename == 'blobby.ppm' or input_filename == 'tommy.ppm' or input_filename == 'hounddogs.ppm' or input_filename == 'jolly.ppm':
+           
+            confirmation_inputfile = True
+            
+        else:
+            print('Please type in a valid file.')
+            input_filename = input('PPM file? ')
+            
+            confirmation_inputfile = False
+       
+    heyo = False
+    while heyo == False:
+    
+        if mod >= 1 and mod <= 9:
+            
+            heyo = True
+            
+        else:
+            print('Please select a mod from 1-9. ')
+            
+            mod = int(input("""Select a filter:
+            1. Negate red
+            2. Negate green
+            3. Negate blue
+            4. Negate all
+            5. Remove red
+            6. Remove green
+            7. Remove blue
+            8. Flip horizontally
+            9. Grayscale
+            """))
+            
+            heyo = False
+    
+    # if it passes the input validation loop, then the code will proceed accordingly       
+    
+    
+
+    # open the file
+    input_file = open(input_filename, 'r')
+
+    # get output filename
+    output_filename = make_output_filename(input_filename, mod)
+    output_file = open(output_filename, 'w')
+
+    # process the file
+    process_header(input_file, output_file)
+    process_body(input_file, output_file, mod)
+
+    # close both files, print filename, and display image
+    input_file.close()
+    output_file.close()
+    print('Output file with filter', mod, 'applied is named', output_filename)
+    display_ppm(output_filename)
+    
+
+    
+
+main()
