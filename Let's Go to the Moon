@@ -1,0 +1,33 @@
+# Description: The following variables and algorithms are attempting to find the time (seconds) for a hammer to drop from 100 yards on Neptune and the hammer's velocity during fall (meters per second at impact). 
+
+import math
+
+Distance_to_drop_m = float(input('At what distance (in meters) will the object be dropped?: '))
+
+Radius_of_planet_m =  float(input('What is the radius (in meters) of the planet on which the object is dropped?: '))
+
+Mass_of_planet_kg = float(input('What is the mass (in kilograms) of the planet on which the object is dropped?: '))
+
+gravity_constant = 6.674e-11
+    
+ # It will take 4.315493222302034 seconds for the object to drop 91.44 meters.
+
+ # The object will be traveling 42.377543094007095 meters per second at impact.
+    
+predicted_fall_t = (math.sqrt(Distance_to_drop_m)) * (math.sqrt( (1) / ( (1/2) * (gravity_constant) * 
+                                                         (Mass_of_planet_kg / (Radius_of_planet_m ** 2)))) )
+                                                         
+print('It will take ', predicted_fall_t, ' seconds for the object to drop ', Distance_to_drop_m,' meters.', sep='')
+
+
+# now velocity
+
+
+predicted_v = (gravity_constant) * ((Mass_of_planet_kg) / (Radius_of_planet_m ** 2)) * (predicted_fall_t)
+
+
+print('The object will be traveling ', predicted_v, ' meters per second at impact.', sep='')
+
+       
+      
+
