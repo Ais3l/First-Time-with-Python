@@ -1,0 +1,91 @@
+# Description: The following code attempts to calculate the APR (as a percentage) of a user's payday loan  depending on two different cases: one where the user is given the loan amount (in dollars), the finance charge (in dollars), and the repayment period (either in days or months), and the other where the user is given a fee (in dollars) per each $100 borrowed, and the repayment period (either in days or months). Depending on the scenario, the code will guide the user through different questions to calculate the designated APR as a percentage.
+
+DAYS_PER_YEAR = 365
+
+#the following print functions will simply give the user a heads up on necessary information for their desired APR
+
+print("Welcome to the payday loan APR calculator.")
+
+print('Please have the proposed terms of your payday loan handy so we can calculate the APR.')
+
+print()
+
+print('Select which one best fits your situation.')
+
+print('  (1) I know the total loan amount, the finance charge, and the repayment period (in days or months).')
+
+print('  (2) I know the fee in dollars for every 100 dollars borrowed and the repayment period (in days or months).')
+
+print()
+
+info_method = int(input('How was the information given to you? Choose (1) or (2): '))
+
+print()
+
+#starting now, the else-if statements are introduced. the code will follow through depending on the integer input for the variable info_method. if the input is "1," then the code will run through the immediate functions we see below. i have also included a def function, which calls out "sleeping" functions whenever the function name is cited, such as "func_1()."
+
+#if the input is "1," then a series of questions will be asked for their financial information. upon the user's inputs, the variable and formula "apr_d" will calculate the APR. finally, the last print function in the function "func_1" will include the calculated APR into a sentence the user can see and understand. as a side note, it is of utter importance to note that if the user inputs "d", "D," "days," or "Days," the code will follow a different trajectory that calculates the APR in the context of days, not months. however, if anything else, such as "m" or "M," the code will calculate the APR in the context of months, not days.
+
+if info_method == 1:
+    total_loan_amount = float(input('What is the total loan amount? '))
+    
+    finance_charge = float(input('What is the finance charge for the loan? '))
+    
+    length_of_repay_period = input('Is the length of the repayment period in days or months? Enter d or m: ')
+    
+    def func_1():
+        repayment_days_d = int(input('How many days is the repayment period? '))
+        
+        apr_d = ((((finance_charge/total_loan_amount) * (365)) / repayment_days_d) * 100)
+        
+        print()
+        
+        print('Your ', repayment_days_d, ' day loan has an APR of ', ('{:.2f}'.format(apr_d)), '%.', sep='')
+        
+    if length_of_repay_period == 'days' or length_of_repay_period == 'Days' or length_of_repay_period == 'd' or length_of_repay_period == 'D': 
+        func_1()
+        
+        
+    else: 
+        repayment_months_a = int(input('How many months is the repayment period? '))
+        
+        apr_m = ((((finance_charge / total_loan_amount) * (12)) / repayment_months_a) * 100)
+        
+        print()
+        
+        print('Your ', repayment_months_a, ' month loan has an APR of ', ('{:.2f}'.format(apr_m)), '%.', sep='')
+
+#this section below is the "else" for the else-if statements. the code will be led here if the user selects scenario #2 instead of scenario #1 in the question above. additionally, the above "else" is an "else" that is within the primary "if" function. here, everything remains pretty much the same except for the name of the defined function, which is now "func_2," and the fact that the questions are different. nevertheless, the intent is the same: to calculate the proper APR depending on the user's inputs.
+
+else:
+    fee = float(input('What is the fee for each $100? '))
+    
+    length_of_repay_period_ = input('Is the length of the repayment period in days or months? Enter d or m: ')
+    
+    def func_2():
+        repayment_days_d_ = int(input('How many days is the repayment period? '))
+        
+        apr_d_ = ((fee * 365) / repayment_days_d_) 
+        
+        print()
+        
+        print('Your ', repayment_days_d_, ' day loan has an APR of ', ('{:.2f}'.format(apr_d_)), '%.', sep='')
+        
+    if length_of_repay_period_ == 'days' or length_of_repay_period_ == 'Days' or length_of_repay_period_ == 'd' or length_of_repay_period_ == 'D': 
+        func_2()
+        
+    else: 
+        repayment_months_a_ = int(input('How many months is the repayment period? '))
+        
+        apr_m_ = ((fee * 12) / repayment_months_a_)
+        
+        print()
+        
+        print('Your ', repayment_months_a_, ' month loan has an APR of ', ('{:.2f}'.format(apr_m_)), '%.', sep='')
+        
+        
+#lastly, this is what i have done for the additional challenges section:
+
+#I have included the "def function_name()" that we learned a couple days prior for the else-if statement.
+
+#Moreover, have included the option for the user to input not only input "d" or "D" -- I have also included the option for the code to understand "days" and "Days".
